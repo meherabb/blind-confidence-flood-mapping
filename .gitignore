@@ -1,0 +1,34 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# --- Data (downloaded by the notebook at runtime; not tracked) ---
+data/
+*.tif
+*.tiff
+
+# --- LaTeX build artifacts ---
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/*.fdb_latexmk
+paper/*.fls
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Large local artifacts not meant for version control ---
+outputs.zip
+*.ckpt
+*.pt
+*.pth
