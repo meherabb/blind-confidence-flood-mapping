@@ -8,8 +8,27 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](#requirements)
 [![Reproducible](https://img.shields.io/badge/pipeline-single%20T4%20GPU%2C%20%3C1%20GPU--hour-brightgreen.svg)](#reproducing-the-results)
+[![Status](https://img.shields.io/badge/status-double--blind%20review-lightgrey.svg)](#citation)
 
 </div>
+
+---
+
+## Contents
+
+- [Overview](#overview)
+- [Pipeline at a glance](#pipeline-at-a-glance)
+- [Headline findings](#headline-findings)
+- [Repository structure](#repository-structure)
+- [Method, in one paragraph](#method-in-one-paragraph)
+- [Data](#data)
+- [Requirements](#requirements)
+- [Reproducing the results](#reproducing-the-results)
+- [Results](#results)
+- [Figures](#figures)
+- [Honest limitations](#honest-limitations)
+- [Citation](#citation)
+- [License](#license)
 
 ---
 
@@ -21,7 +40,21 @@ Optical flood-mapping models are least reliable exactly when they are most neede
 
 We build a controlled cloud-severity ladder over real Sentinel-1 / Sentinel-2 chips from [Sen1Floods11](https://github.com/cloudtostreet/Sen1Floods11) and evaluate four flood classifiers — an optical U-Net, a cloud-invariant SAR U-Net, an early-fusion SAR+optical U-Net, and a classical NDWI rule — across seven synthetic cloud severities. Everything in this repository — data pooling, training, evaluation, all statistical tests, and every figure and table in the paper — runs end to end from a single notebook on one free-tier GPU in under an hour.
 
-**Headline findings**
+---
+
+## Pipeline at a glance
+
+The diagram below is the exact methodological figure from the paper's appendix — included here unmodified so the repository and the paper never drift apart.
+
+<p align="center">
+  <img src="assets/pipeline_diagram.png" width="640" alt="End-to-end pipeline: data pooling and filtering, the synthetic cloud-severity ladder, four models evaluated identically at every severity, per-chip metrics, three families of diagnostic analysis, and the three resulting findings">
+</p>
+
+<p align="center"><sub>Colors are decorative groupings only and carry no quantitative meaning — see the paper (<code>paper/main.tex</code>, Appendix A) for the full figure caption and cross-references.</sub></p>
+
+---
+
+## Headline findings
 
 | | Finding |
 |---|---|
@@ -41,6 +74,8 @@ Every claim above is reproducible from the artifacts in [`results/`](results/) a
 
 ```
 .
+├── assets/
+│   └── pipeline_diagram.png           # the methodology figure above, reused verbatim from the paper
 ├── notebooks/
 │   └── blind_confidence_flood.ipynb   # the full pipeline: data → training → evaluation → figures/tables
 │                                       # (this exact executed notebook produced every result in results/)
@@ -87,7 +122,32 @@ See [`requirements.txt`](requirements.txt) for a pinned environment. The noteboo
 
 ## Reproducing the results
 
-The notebook has a single configuration cell controlling every run parameter. **Run it in `DRY_RUN` mode first** — it substitutes tiny synthetic data so every code path executes in under a minute, including two deliberately injected edge cases (a chip with zero valid ground truth, and non-finite Sentinel-1 values) that earlier iterations of this pipeline did not handle correctly and now do:
+The notebook has a single configuration cell controlling every run parameter. **Run it in `DRY_RUN` mode first** — it substitutes tiny synthetic data so every code path executes in under a minute, including two deliberately injected edge cases (a chip with zero valid ground truth, and non-finite Sentinel-1 values) that earlier iterations of this pipeline did not handle correctly and now do.
+
+```mermaid
+flowchart TD
+    A["Clone repository"] --> B["Open notebooks/blind_confidence_flood.ipynb"]
+    B --> C{"DRY_RUN = True"}
+    C --> D["Synthetic smoke test<br/>~1 minute, CPU or GPU"]
+    D --> E{"All cells pass?"}
+    E -->|"yes"| F["DRY_RUN = False"]
+    E -->|"no"| B
+    F --> G["Auto-download Sen1Floods11<br/>from public GCS bucket"]
+    G --> H["Train 3 U-Nets<br/>103s on 1x T4 GPU"]
+    H --> I["Evaluate across 7 severities"]
+    I --> J["Generate all figures + tables"]
+    J --> K[("results/")]
+
+    classDef start fill:#1b9e77,color:#fff,stroke:#0d5c44,stroke-width:2px
+    classDef check fill:#d95f02,color:#fff,stroke:#8c3d01,stroke-width:2px
+    classDef process fill:#7570b3,color:#fff,stroke:#4d4a75,stroke-width:2px
+    classDef output fill:#66a61e,color:#fff,stroke:#3d6612,stroke-width:2px
+
+    class A,B start
+    class C,E check
+    class D,F,G,H,I,J process
+    class K output
+```
 
 ```python
 DRY_RUN = True    # start here — synthetic smoke test, no download, ~1 minute
@@ -105,7 +165,7 @@ Once that passes, set `DRY_RUN = False` and run top to bottom for the real pipel
 | Optimizer | AdamW, lr = 1e-3, weight decay = 1e-4 |
 | Severity grid | 7 levels, 0.00 → 0.90 |
 | Bootstrap / permutation resamples | 2,000 / 20,000 |
-| Random seed | 42 (single seed — see *Limitations*) |
+| Random seed | 42 (single seed — see [*Limitations*](#honest-limitations)) |
 
 The full hyperparameter and reproducibility reference — every value used to produce the paper's results in one place — is Table 6 in the paper appendix.
 
@@ -131,7 +191,7 @@ The full hyperparameter and reproducibility reference — every value used to pr
 
 Raw accuracy barely moves for the optical model while water-class IoU collapses — the whole reason the paper reports IoU as the primary damage metric, not accuracy. Full per-severity tables (all 7 points, not just the 3 shown here) are in the paper appendix and in [`results/tables/`](results/tables/).
 
-### Figures
+## Figures
 
 | | | |
 |:---:|:---:|:---:|
