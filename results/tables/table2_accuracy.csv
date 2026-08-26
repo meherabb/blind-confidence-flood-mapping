@@ -1,0 +1,5 @@
+model,acc_s0.0,acc_s0.45,acc_s0.9
+Optical U-Net,0.955,0.931,0.914
+SAR U-Net,0.959,0.959,0.959
+SAR+Optical U-Net,0.968,0.906,0.602
+NDWI (rule-based),0.966,0.966,0.966

@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{Confidence--accuracy GapAUC by model under the synthetic cloud-severity ladder.}
+\label{tab:gapauc}
+\begin{tabular}{lccc}
+\toprule
+Model & GapAUC & 95\% CI & $p$ vs.\ Optical (Bonf.) \\
+\midrule
+Optical U-Net & +0.047 & [+0.027, +0.070] & -- \\
+SAR U-Net & +0.014 & [+0.006, +0.025] & 0.0056 \\
+SAR+Optical U-Net & +0.006 & [-0.001, +0.013] & 0.0001 \\
+NDWI (rule-based) & -0.566 & [-0.583, -0.551] & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}

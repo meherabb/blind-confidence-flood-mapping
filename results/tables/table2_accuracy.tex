@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{Pixel accuracy at representative cloud severities.}
+\label{tab:acc_by_severity}
+\begin{tabular}{lccc}
+\toprule
+Model & Acc @ s=0.00 & Acc @ s=0.45 & Acc @ s=0.90 \\
+\midrule
+Optical U-Net & 0.955 & 0.931 & 0.914 \\
+SAR U-Net & 0.959 & 0.959 & 0.959 \\
+SAR+Optical U-Net & 0.968 & 0.906 & 0.602 \\
+NDWI (rule-based) & 0.966 & 0.966 & 0.966 \\
+\bottomrule
+\end{tabular}
+\end{table}
