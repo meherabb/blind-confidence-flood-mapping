@@ -47,7 +47,7 @@ We build a controlled cloud-severity ladder over real Sentinel-1 / Sentinel-2 ch
 The diagram below is the exact methodological figure from the paper's appendix — included here unmodified so the repository and the paper never drift apart.
 
 <p align="center">
-  <img src="assets/pipeline_diagram.png" width="640" alt="End-to-end pipeline: data pooling and filtering, the synthetic cloud-severity ladder, four models evaluated identically at every severity, per-chip metrics, three families of diagnostic analysis, and the three resulting findings">
+  <img src="pipeline_diagram.png" width="640" alt="End-to-end pipeline: data pooling and filtering, the synthetic cloud-severity ladder, four models evaluated identically at every severity, per-chip metrics, three families of diagnostic analysis, and the three resulting findings">
 </p>
 
 <p align="center"><sub>Colors are decorative groupings only and carry no quantitative meaning — see the paper (<code>paper/main.tex</code>, Appendix A) for the full figure caption and cross-references.</sub></p>
